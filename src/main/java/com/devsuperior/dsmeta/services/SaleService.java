@@ -1,11 +1,19 @@
 package com.devsuperior.dsmeta.services;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.devsuperior.dsmeta.dto.ReportDTO;
 import com.devsuperior.dsmeta.dto.SaleMinDTO;
+import com.devsuperior.dsmeta.dto.SummaryDTO;
 import com.devsuperior.dsmeta.entities.Sale;
 import com.devsuperior.dsmeta.repositories.SaleRepository;
 
@@ -19,5 +27,28 @@ public class SaleService {
 		Optional<Sale> result = repository.findById(id);
 		Sale entity = result.get();
 		return new SaleMinDTO(entity);
+	}
+	
+	public Page<ReportDTO> getReport(String minDate, String maxDate, String name, Pageable pageable){
+		LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
+		
+		LocalDate endDate = maxDate.equals("") ? today : LocalDate.parse(maxDate);
+		LocalDate startDate = minDate.equals("") ? endDate.minusYears(1L) : LocalDate.parse(minDate);
+		
+		Page<ReportDTO> result = repository.report(startDate, endDate, name, pageable);
+		
+		return result;
+		
+	}
+	public List<SummaryDTO> getSummary(String minDate, String maxDate){
+		LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
+		
+		LocalDate endDate = maxDate.equals("") ? today : LocalDate.parse(maxDate);
+		LocalDate startDate = minDate.equals("") ? endDate.minusYears(1L) : LocalDate.parse(minDate);
+		
+		List<SummaryDTO> result = repository.summary(startDate, endDate);
+		
+		return result;
+		
 	}
 }
