@@ -35,9 +35,11 @@ public class SaleService {
 		LocalDate endDate = maxDate.equals("") ? today : LocalDate.parse(maxDate);
 		LocalDate startDate = minDate.equals("") ? endDate.minusYears(1L) : LocalDate.parse(minDate);
 		
-		Page<ReportDTO> result = repository.report(startDate, endDate, name, pageable);
+		Page<Sale> result = repository.report(startDate, endDate, name, pageable);
 		
-		return result;
+		repository.searchSaleWithSellers(result.getContent());
+		
+		return result.map(x -> new ReportDTO(x));
 		
 	}
 	public List<SummaryDTO> getSummary(String minDate, String maxDate){

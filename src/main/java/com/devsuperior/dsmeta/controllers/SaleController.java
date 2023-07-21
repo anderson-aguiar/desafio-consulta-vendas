@@ -37,6 +37,8 @@ public class SaleController {
 			@RequestParam(name = "name", defaultValue = "")String name, Pageable pageable) {
 			Page<ReportDTO> dto = service.getReport(minDate, maxDate, name, pageable);
 			
+			
+			
 		return ResponseEntity.ok(dto);
 	}
 

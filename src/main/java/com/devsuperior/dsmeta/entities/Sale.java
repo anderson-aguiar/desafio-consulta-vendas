@@ -3,6 +3,7 @@ package com.devsuperior.dsmeta.entities;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ public class Sale {
 	private Double amount;
 	private LocalDate date;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "seller_id")
 	private Seller seller;
 	
